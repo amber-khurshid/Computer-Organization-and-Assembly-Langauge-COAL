@@ -1,0 +1,90 @@
+     1                                  [org 0x0100]
+     2                                  
+     3 00000000 E94300                  jmp start
+     4                                  
+     5 00000003 2D00                    num1: dw 45
+     6 00000005 1600                    num2: dw 22
+     7                                  
+     8                                  equality:
+     9 00000007 55                          push bp
+    10 00000008 89E5                        mov bp, sp
+    11 0000000A 50                          push ax
+    12 0000000B 53                          push bx
+    13                                  
+    14                                      
+    15 0000000C 8B4606                      mov ax, [bp+6] 
+    16 0000000F 8B5E04                      mov bx, [bp+4]  
+    17                                  
+    18                                     
+    19 00000012 39D8                        cmp ax, bx
+    20 00000014 7500                        jne not_equal
+    21                                    
+    22                                  not_equal:
+    23                                  
+    24 00000016 5B                          pop bx
+    25 00000017 58                          pop ax
+    26 00000018 89EC                        mov sp, bp
+    27 0000001A 5D                          pop bp
+    28 0000001B C3                          ret
+    29                                  
+    30                                  less_than_or_equal_to:
+    31 0000001C 55                          push bp
+    32 0000001D 89E5                        mov bp, sp
+    33 0000001F 50                          push ax
+    34 00000020 53                          push bx
+    35                                  
+    36                                   
+    37 00000021 8B4606                      mov ax, [bp+6]  
+    38 00000024 8B5E04                      mov bx, [bp+4]  
+    39                                  
+    40                                      
+    41 00000027 39D8                        cmp ax, bx
+    42 00000029 7F00                        jg not_less_equal
+    43                                      
+    44                                  not_less_equal:
+    45                                  
+    46 0000002B 5B                          pop bx
+    47 0000002C 58                          pop ax
+    48 0000002D 89EC                        mov sp, bp
+    49 0000002F 5D                          pop bp
+    50 00000030 C3                          ret
+    51                                  
+    52                                  greater_than_or_equal_to:
+    53 00000031 55                          push bp
+    54 00000032 89E5                        mov bp, sp
+    55 00000034 50                          push ax
+    56 00000035 53                          push bx
+    57                                  
+    58                                      
+    59 00000036 8B4606                      mov ax, [bp+6]  
+    60 00000039 8B5E04                      mov bx, [bp+4]  
+    61                                  
+    62                                      
+    63 0000003C 39D8                        cmp ax, bx
+    64 0000003E 7C00                        jl not_greater_equal
+    65                                      
+    66                                  not_greater_equal:
+    67                                  
+    68 00000040 5B                          pop bx
+    69 00000041 58                          pop ax
+    70 00000042 89EC                        mov sp, bp
+    71 00000044 5D                          pop bp
+    72 00000045 C3                          ret
+    73                                  
+    74                                  start:
+    75                                      
+    76 00000046 A1[0300]                    mov ax, [num1]
+    77 00000049 8B1E[0500]                  mov bx, [num2]
+    78                                  
+    79                                      
+    80 0000004D 53                          push bx
+    81 0000004E 50                          push ax
+    82                                  
+    83                                      
+    84 0000004F E8B5FF                      call equality
+    85 00000052 E8C7FF                      call less_than_or_equal_to
+    86 00000055 E8D9FF                      call greater_than_or_equal_to
+    87                                  
+    88                                     
+    89 00000058 B8004C                      mov ax, 0x4c00
+    90 0000005B CD21                        int 0x21
